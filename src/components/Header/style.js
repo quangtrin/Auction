@@ -1,20 +1,39 @@
 import { createUseStyles } from "react-jss";
 export const HeaderStyles = createUseStyles({
     layoutHeader: {
-        boxShadow: "0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 1px 6px - 1px rgba(0, 0, 0, 0.02), 0 2px 4px 0 rgba(0, 0, 0, 0.02)",
+        boxShadow: "0px 5px 20px 0 rgb(0 0 0 / 15%)",
         position: "fixed",
         width: "100%",
         display: "flex",
-        alignItems: "flex-end",
-        height: "45px"
+        alignItems: "center",
+        top: 0,
+        borderBottom: "1px solid rgba(5, 5, 5, 0.06)",
+        zIndex: 2,
+        background: "white"
     },
     layoutLogo: {
-        width:"75%",
-        borderBottom: "1px solid rgba(5, 5, 5, 0.06)"
+        width: "70%",
+        display: "flex",
+        alignItems: "center",
+        paddingLeft: "20px"
     },
     layoutMenu: {
-        position: "absolute",
-        width: "25%",
-        right: "0"
+        // position: "absolute",
+        width: "20%",
+        // right: "0"
+    },
+    layoutBtnConnect: {
+        width: "10%",
+        textAlign: "center"
+    },
+    currentAccount: {
+        whiteSpace: "nowrap",
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+        marginRight: "20px",
+        background: "#1677FF",
+        padding: "7px 5px",
+        color:"white",
+        borderRadius: "5px"
     }
 })

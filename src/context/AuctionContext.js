@@ -44,6 +44,13 @@ const connectingWithSmartContract = async () => {
     }
 }
 
+const checkIsOwner = async () => {
+    const contract = await connectingWithSmartContract();
+    const owner = await contract?.owner();
+    console.log(owner === contract.runner.address);
+    return owner === contract.runner.address;
+} 
+
 export const AuctionContext = React.createContext();
 
 export const AuctionProvider = ({ children }) => {
@@ -68,7 +75,7 @@ export const AuctionProvider = ({ children }) => {
     const connectWallet = async () => {
         try {
             if (!window.ethereum) return console.log("Install MetaMask");
-            const accounts = await window.ethereum.request({ method: "eth_requestAccount", })
+            const accounts = await window.ethereum.request({ method: "eth_requestAccounts", })
 
             setCurrentAccount(accounts[0])
             window.location.reload();
@@ -80,13 +87,16 @@ export const AuctionProvider = ({ children }) => {
 
     useEffect(() => {
         checkIfWalletConnected();
+        checkIsOwner();
     }, []);
 
     return (
         <AuctionContext.Provider
             value={{
                 tittle,
-                checkIfWalletConnected
+                checkIfWalletConnected,
+                currentAccount,
+                connectWallet
             }}
         >
             {children}

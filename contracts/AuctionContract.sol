@@ -40,6 +40,7 @@ contract AuctionContract is ERC1155, Ownable, Pausable, ERC1155Supply {
         string name;
         string description;
         string uri;
+        uint limit;
     }
 
     constructor() ERC1155("https://ipfs.infura.io:5001") {}
@@ -174,7 +175,7 @@ contract AuctionContract is ERC1155, Ownable, Pausable, ERC1155Supply {
 
     function newMint(
         uint256 amount,
-        uint limit,
+        uint _limit,
         string memory _uri,
         string memory name,
         string memory description
@@ -184,17 +185,18 @@ contract AuctionContract is ERC1155, Ownable, Pausable, ERC1155Supply {
             "WRONG, Not enough money sent"
         );
         require(exitsTokenId[idCount] == 0, "Exited token");
-        require(amount < limit, "You have created more than allowed amount");
+        require(amount < _limit, "You have created more than allowed amount");
         require(bytes(_uri).length > 0, "Please add data to this nft");
         require(existsUri[_uri] == 0, "Image existed");
         _mint(msg.sender, idCount, amount, "");
         tokenIds.push(idCount);
         exitsTokenId[idCount] = 1;
-        limitAmount[idCount] = limit;
+        limitAmount[idCount] = _limit;
         setTokenUri(idCount, _uri);
         tokens[idCount].name = name;
         tokens[idCount].description = description;
         tokens[idCount].uri = _uri;
+        tokens[idCount].limit = _limit;
         existsUri[_uri] = 1;
         idCount++;
     }
