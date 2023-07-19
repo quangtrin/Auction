@@ -1,16 +1,37 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { HeaderStyles } from "./style";
 import { Button, Menu } from "antd";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 import logo from "../../imgs/logo.jpg";
 import { AuctionContext } from "../../context/AuctionContext";
 
 const Header = () => {
   const navigation = useNavigate();
-  const { currentAccount, connectWallet } = useContext(AuctionContext);
+  const location = useLocation();
+  const { currentAccount, connectWallet, isOwner } =
+    useContext(AuctionContext);
   const [current, setCurrent] = useState("auctions");
+  // const [isOwner, setIsOwner] = useState(false);
   const items = [
+    {
+      label: "Auctions",
+      key: "auctions",
+    },
+    {
+      label: "History",
+      key: "history",
+    },
+    {
+      label: "My collection",
+      key: "myCollection",
+    },
+  ];
+  const itemsAdmin = [
+    {
+      label: "All Token",
+      key: "allToken",
+    },
     {
       label: "Auctions",
       key: "auctions",
@@ -28,8 +49,17 @@ const Header = () => {
 
   const menuChange = (e) => {
     navigation("/" + e.key);
-    setCurrent(e.key)
-  }
+    setCurrent(e.key);
+  };
+  useEffect(() => {
+    if (location.pathname === "/auctions") {
+      setCurrent("auctions");
+    } else if (location.pathname === "/myCollection") {
+      setCurrent("myCollection");
+    } else if (location.pathname === "/allToken") {
+      setCurrent("allToken");
+    }
+  }, [location]);
   return (
     <div className={classes.layoutHeader}>
       <div className={classes.layoutLogo}>
@@ -43,7 +73,8 @@ const Header = () => {
           onClick={menuChange}
           selectedKeys={[current]}
           mode="horizontal"
-          items={items}
+          items={isOwner ? itemsAdmin : items}
+          style={{justifyContent: "end"}}
         />
       </div>
       <div className={classes.layoutBtnConnect}>

@@ -18,18 +18,18 @@ contract AuctionContract is ERC1155, Ownable, Pausable, ERC1155Supply {
     uint256[] private tokenIds;
     uint256 private idCount = 0;
     mapping(uint256 => Auction) public auctions;
-    uint private idAuctionsCount = 0;
+    uint256 public idAuctionsCount = 0;
 
     struct Auction {
-        uint id;
+        uint256 id;
         uint256 tokenId;
-        uint amount;
+        uint256 amount;
         address owner;
         uint256 currentCost;
         address currentBidder;
-        uint timeStart;
-        uint timeLimit;
-        uint timeEnd;
+        uint256 timeStart;
+        uint256 timeLimit;
+        uint256 timeEnd;
         address[] bidder;
         uint256[] biddingPrice;
         uint8 isEnd;
@@ -40,24 +40,20 @@ contract AuctionContract is ERC1155, Ownable, Pausable, ERC1155Supply {
         string name;
         string description;
         string uri;
-        uint limit;
+        uint256 limit;
     }
 
     constructor() ERC1155("https://ipfs.infura.io:5001") {}
 
     function createAuction(
         uint256 tokenId,
-        uint amount,
+        uint256 amount,
         uint256 currentCost,
-        uint timeLimit,
-        uint timeEnd
+        uint256 timeLimitDuration,
+        uint256 timeEndDuration
     ) public payable {
         require(exitsTokenId[tokenId] == 1, "Not exits this tokenId");
         require(amount == 1, "amount is not valid");
-        require(
-            timeLimit > block.timestamp && timeEnd >= timeLimit,
-            "The deadline should be a date in the future."
-        );
         require(
             balanceOf(msg.sender, tokenId) > 0,
             "This token does not exist in your wallet"
@@ -66,14 +62,16 @@ contract AuctionContract is ERC1155, Ownable, Pausable, ERC1155Supply {
             existsAuctionForToken[tokenId] == 0,
             "An auction for this token already exists"
         );
+        uint256 currentTime = block.timestamp;
         Auction storage newAuction = auctions[idAuctionsCount];
+        newAuction.id = idAuctionsCount;
         newAuction.tokenId = tokenId;
         newAuction.amount = amount;
         newAuction.owner = msg.sender;
         newAuction.currentCost = currentCost;
         newAuction.currentBidder = address(0);
-        newAuction.timeLimit = timeLimit;
-        newAuction.timeEnd = timeEnd;
+        newAuction.timeLimit = currentTime + timeLimitDuration;
+        newAuction.timeEnd = currentTime + timeEndDuration;
         newAuction.timeStart = block.timestamp;
         newAuction.isEnd = 0;
         idAuctionsCount++;
@@ -81,7 +79,7 @@ contract AuctionContract is ERC1155, Ownable, Pausable, ERC1155Supply {
         
     }
 
-    function bid(uint idAuction) public payable {
+    function bid(uint256 idAuction) public payable {
         require(auctions[idAuction].isEnd == 0, "Auction has ended");
         require(
             msg.value > auctions[idAuction].currentCost,
@@ -119,7 +117,6 @@ contract AuctionContract is ERC1155, Ownable, Pausable, ERC1155Supply {
             ""
         );
         payable(auction.owner).transfer(winningBid);
-        refundDeposits(auctionId);
         auction.isEnd = 1;
         existsAuctionForToken[auction.tokenId] = 0;
     }
@@ -175,7 +172,7 @@ contract AuctionContract is ERC1155, Ownable, Pausable, ERC1155Supply {
 
     function newMint(
         uint256 amount,
-        uint _limit,
+        uint256 _limit,
         string memory _uri,
         string memory name,
         string memory description
@@ -218,5 +215,13 @@ contract AuctionContract is ERC1155, Ownable, Pausable, ERC1155Supply {
 
     function getToken(uint256 tokenId) external view returns (Token memory) {
         return tokens[tokenId];
+    }
+
+    function getBidder(uint256 auctionId) external view returns (address[] memory){
+       return auctions[auctionId].bidder;
+    }
+
+    function getBiddingPrice(uint256 auctionId) external view returns (uint256[] memory){
+       return auctions[auctionId].biddingPrice;
     }
 }

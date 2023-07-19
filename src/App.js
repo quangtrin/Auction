@@ -4,6 +4,9 @@ import { useContext, useEffect } from 'react';
 import Header from './components/Header';
 import { Route, Routes } from 'react-router-dom';
 import Auctions from './pages/Auctions/Auctions';
+import MyCollection from './pages/MyCollection';
+import AllToken from './pages/AllToken'
+import History from './pages/History';
 
 
 function App() {
@@ -17,6 +20,9 @@ function App() {
         <Routes>
           <Route path='/' element={<Auctions />} />
           <Route path='/auctions' element={<Auctions />} />
+          <Route path='/myCollection' element={<MyCollection />} />
+          <Route path='/allToken' element={<AllToken />} />
+          <Route path='/history' element={<History />} />
         </Routes>
       </div>
     </div>

@@ -12,14 +12,14 @@ export const HeaderStyles = createUseStyles({
         background: "white"
     },
     layoutLogo: {
-        width: "70%",
+        width: "65%",
         display: "flex",
         alignItems: "center",
         paddingLeft: "20px"
     },
     layoutMenu: {
         // position: "absolute",
-        width: "20%",
+        width: "25%",
         // right: "0"
     },
     layoutBtnConnect: {
