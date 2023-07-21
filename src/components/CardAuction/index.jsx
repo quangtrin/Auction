@@ -79,7 +79,7 @@ const CardAuction = ({ auction, isOwner, isEdit }) => {
           style={{
             width: 280,
             cursor: "auto",
-            marginBottom: "20px"
+            marginBottom: "20px",
           }}
           cover={<img alt={auction.token.name} src={auction.token.uri} />}
           actions={
@@ -110,7 +110,14 @@ const CardAuction = ({ auction, isOwner, isEdit }) => {
             <span style={{ fontWeight: "600" }}>Time limit: </span>
             {formatDate(new Date(Number(auction.timeLimit.toString())))}
           </div>
-          <div className={classes.timeEnd}>
+          <div
+            className={classes.timeEnd}
+            style={
+              Date.now() > Number(auction.timeEnd.toString())
+                ? { color: "red" }
+                : null
+            }
+          >
             <span style={{ fontWeight: "600" }}>Time end: </span>
             {formatDate(new Date(Number(auction.timeEnd.toString())))}
           </div>

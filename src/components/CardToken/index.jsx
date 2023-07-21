@@ -38,7 +38,7 @@ const CardToken = ({ token, isOwner }) => {
           ),
         ]}
       >
-        <div className={classes.tokenName}>{token.name}</div>
+        <div className={classes.tokenName + " wrap_text_1"}>{token.name}</div>
         <div className={classes.amount}>
           <span style={{ fontWeight: "700" }}>Amount: </span>
           {token.total.toString()}
@@ -47,7 +47,7 @@ const CardToken = ({ token, isOwner }) => {
           <span style={{ fontWeight: "700" }}>Limit: </span>
           {token.limit.toString()}
         </div>
-        <Tooltip title={token.description} placement="right" trigger={"click"}>
+        <Tooltip title={token.description} placement="right">
           <div className={classes.tokenDes}>{token.description}</div>
         </Tooltip>
       </Card>

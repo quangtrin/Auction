@@ -45,6 +45,18 @@ contract AuctionContract is ERC1155, Ownable, Pausable, ERC1155Supply {
 
     constructor() ERC1155("https://ipfs.infura.io:5001") {}
 
+    function totalSupply(
+        uint256 id
+    ) public view virtual override returns (uint256) {
+        uint256 total = super.totalSupply(id);
+        for (uint i = 0; i < idAuctionsCount; i++) {
+            if (auctions[i].tokenId == id && auctions[i].isEnd == 0) {
+                total += auctions[i].amount;
+            }
+        }
+        return total;
+    }
+
     function createAuction(
         uint256 tokenId,
         uint256 amount,
@@ -64,6 +76,7 @@ contract AuctionContract is ERC1155, Ownable, Pausable, ERC1155Supply {
         );
         uint256 currentTime = block.timestamp;
         Auction storage newAuction = auctions[idAuctionsCount];
+        _burn(msg.sender, tokenId, amount);
         newAuction.id = idAuctionsCount;
         newAuction.tokenId = tokenId;
         newAuction.amount = amount;
@@ -76,7 +89,6 @@ contract AuctionContract is ERC1155, Ownable, Pausable, ERC1155Supply {
         newAuction.isEnd = 0;
         idAuctionsCount++;
         existsAuctionForToken[tokenId] = 1;
-        
     }
 
     function bid(uint256 idAuction) public payable {
@@ -107,16 +119,15 @@ contract AuctionContract is ERC1155, Ownable, Pausable, ERC1155Supply {
             "The minimum time has not been reached to end"
         );
         Auction storage auction = auctions[auctionId];
+        require(msg.sender == auction.owner, "You are not owner of this token");
         address winner = auction.currentBidder;
         uint256 winningBid = auction.currentCost;
-        safeTransferFrom(
-            auction.owner,
-            winner,
-            auction.tokenId,
-            auction.amount,
-            ""
-        );
-        payable(auction.owner).transfer(winningBid);
+        if (auction.currentBidder == address(0)) {
+            _mint(msg.sender, auction.tokenId, auction.amount, "");
+        } else {
+            _mint(winner, auction.tokenId, auction.amount, "");
+            payable(auction.owner).transfer(winningBid);
+        }
         auction.isEnd = 1;
         existsAuctionForToken[auction.tokenId] = 0;
     }
@@ -217,11 +228,15 @@ contract AuctionContract is ERC1155, Ownable, Pausable, ERC1155Supply {
         return tokens[tokenId];
     }
 
-    function getBidder(uint256 auctionId) external view returns (address[] memory){
-       return auctions[auctionId].bidder;
+    function getBidder(
+        uint256 auctionId
+    ) external view returns (address[] memory) {
+        return auctions[auctionId].bidder;
     }
 
-    function getBiddingPrice(uint256 auctionId) external view returns (uint256[] memory){
-       return auctions[auctionId].biddingPrice;
+    function getBiddingPrice(
+        uint256 auctionId
+    ) external view returns (uint256[] memory) {
+        return auctions[auctionId].biddingPrice;
     }
 }

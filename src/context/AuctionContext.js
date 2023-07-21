@@ -142,6 +142,7 @@ export const AuctionProvider = ({ children }) => {
         const currentCostFormatEther = ethers.parseEther(currentCost)
         const transitions = await contract.createAuction(tokenId, amount, currentCostFormatEther, timeLimitDuration, timeEndDuration)
         await transitions.wait();
+        window.location.reload();
     }
     // -- Get all auction
     const getAllAuction = async () => {

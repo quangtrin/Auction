@@ -5,6 +5,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 
 import logo from "../../imgs/logo.jpg";
 import { AuctionContext } from "../../context/AuctionContext";
+import { truncate } from "../../Global";
 
 const Header = () => {
   const navigation = useNavigate();
@@ -79,7 +80,7 @@ const Header = () => {
       </div>
       <div className={classes.layoutBtnConnect}>
         {currentAccount ? (
-          <div className={classes.currentAccount}>{currentAccount}</div>
+          <div className={classes.currentAccount}>{truncate(currentAccount, 5,5,13)}</div>
         ) : (
           <Button onClick={() => connectWallet()} type="primary">
             Connect
