@@ -25,7 +25,7 @@ const AllToken = () => {
         allTokenAndTotal.push({ ...token, total });
       })
     );
-    setTokens(allTokenAndTotal);
+    setTokens(allTokenAndTotal.reverse());
     setLoading(false);
   };
   
