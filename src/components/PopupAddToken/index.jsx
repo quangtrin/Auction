@@ -33,6 +33,7 @@ const NumericInput = (props) => {
         onChange={handleChange}
         placeholder="Enter the amount you want to add"
         maxLength={16}
+        type="number"
       />
     </Tooltip>
   );

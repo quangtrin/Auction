@@ -59,6 +59,8 @@ const Header = () => {
       setCurrent("myCollection");
     } else if (location.pathname === "/allToken") {
       setCurrent("allToken");
+    } else if (location.pathname === "/history") {
+      setCurrent("history");
     }
   }, [location]);
   return (
