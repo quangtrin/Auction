@@ -19,7 +19,7 @@ const History = () => {
         {auctions.map(
           (auction) =>
             Number(auction.isEnd) === 1 && (
-              <Col span={6}>
+              <Col span={6} style={{ display: 'flex', justifyContent: 'center' }}>
                 <CardAuction auction={auction} isEdit={false}/>
               </Col>
             )

@@ -51,7 +51,7 @@ const AllToken = () => {
         <Row gutter={[16, 8]}>
           {tokens?.map((token, index) => {
             return (
-              <Col key={index} span={6}>
+              <Col key={index} span={6} style={{ display: 'flex', justifyContent: 'center' }}>
                 <CardToken token={token} isOwner={true} />
               </Col>
             );

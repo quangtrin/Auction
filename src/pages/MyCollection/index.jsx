@@ -31,7 +31,7 @@ const MyCollection = () => {
             {tokens?.map((token, index) => {
               if(Number(token.total.toString()) > 0)
               return (
-                <Col key={index} span={6}>
+                <Col key={index} span={6} style={{ display: 'flex', justifyContent: 'center' }}>
                   <CardToken token={token} isOwner={false} />
                 </Col>
               );

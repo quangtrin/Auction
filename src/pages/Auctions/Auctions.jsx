@@ -45,7 +45,7 @@ const Auctions = () => {
         {myAuctions.map((auction, index) => {
           if (index < myAuctionCountMax)
             return (
-              <Col key={auction.id} span={6}>
+              <Col key={auction.id} span={6} style={{ display: 'flex', justifyContent: 'center' }}>
                 <CardAuction auction={auction} isOwner={true} isEdit={true} />
               </Col>
             );
@@ -73,7 +73,7 @@ const Auctions = () => {
         {otherAuctions.map(
           (auction, index) =>
             index < otherAuctionCountMax && (
-              <Col key={auction.id} span={6}>
+              <Col key={auction.id} span={6} style={{ display: 'flex', justifyContent: 'center' }}>
                 <CardAuction auction={auction} isOwner={false} isEdit={true} />
               </Col>
             )
